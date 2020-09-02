@@ -25,7 +25,7 @@ class Navbar extends React.Component {
             {
               authed
                 ? <button className="nav-link btn btn-light logout-button" onClick={this.logoutClickEvent}>Logout</button>
-                : <Auth />
+                : <div></div>
             }
           </li>
         </ul>
