@@ -1,11 +1,27 @@
 import React from 'react';
+import {
+  Link,
+  NavLink as RRNavLink,
+} from 'react-router-dom';
+import {
+  Navbar,
+  NavbarToggler,
+  Nav,
+  NavItem,
+  NavLink,
+  Button,
+  Collapse,
+} from 'reactstrap';
 import PropTypes from 'prop-types';
 import firebase from 'firebase/app';
 import 'firebase/auth';
+import './Navbar.scss';
 
-import Auth from '../Auth/Auth';
+class myNavbar extends React.Component {
+  state = {
+    isOpen: false,
+  }
 
-class Navbar extends React.Component {
   static propTypes = {
     authed: PropTypes.bool.isRequired,
   }
@@ -15,23 +31,48 @@ class Navbar extends React.Component {
     firebase.auth().signOut();
   }
 
+  toggle = () => {
+    const { isOpen } = this.state;
+    this.setState({ isOpen: !isOpen });
+  }
+
   render() {
-    const { authed } = this.props;
+    const { isOpen } = this.state;
+
+    const buildNavbar = () => {
+      const { authed } = this.props;
+
+      if (authed) {
+        return (
+        <Nav className="ml-auto" navbar>
+          <NavItem>
+            <NavLink tag={RRNavLink} to="/home">Home</NavLink>
+          </NavItem>
+          <NavItem>
+            <NavLink tag={RRNavLink} to="/stuff">My Hoard</NavLink>
+          </NavItem>
+          <NavItem>
+            <NavLink tag={RRNavLink} to="/new">New</NavLink>
+          </NavItem>
+          <NavItem>
+            <Button className="nav-link btn btn-light logout-button" onClick={this.logoutClickEvent}>Logout</Button>
+          </NavItem>
+        </Nav>
+        );
+      }
+      return <Nav className="ml-auto" navbar></Nav>;
+    };
+
     return (
-      <nav className="navbar navbar-expand-lg navbar-light">
-        <a className="navbar-brand" href="/">Dirty Hoard</a>
-        <ul className="navbar-nav ml-auto">
-          <li className="nav-item">
-            {
-              authed
-                ? <button className="nav-link btn btn-light logout-button" onClick={this.logoutClickEvent}>Logout</button>
-                : <div></div>
-            }
-          </li>
-        </ul>
-      </nav>
+      <Navbar color="light" expand="md">
+        <Link className="navbar-brand" to="/">Dirty Hoard</Link>
+          <NavbarToggler onClick={this.toggle} />
+        <Collapse isOpen={isOpen} navbar>
+          {buildNavbar()}
+        </Collapse>
+      </Navbar>
     );
   }
 }
 
-export default Navbar;
+export default myNavbar;
