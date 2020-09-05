@@ -23,7 +23,7 @@ class MyStuff extends React.Component {
     const itemCards = items.map((item) => <ItemCard key={item.id} item={item}/>);
     return (
       <div className="MyStuff">
-        <h1>MyStuff</h1>
+        <h1>My Dirty Hoard</h1>
         <CardColumns>
           {itemCards}
         </CardColumns>
