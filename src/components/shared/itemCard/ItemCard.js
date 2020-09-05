@@ -1,6 +1,10 @@
 import React from 'react';
 
 import {
+  Link as RRLink,
+} from 'react-router-dom';
+
+import {
   Card, CardImg, CardText, CardBody,
   CardTitle, Button, ButtonGroup,
 } from 'reactstrap';
@@ -15,6 +19,8 @@ class ItemCard extends React.Component {
   render() {
     const { item } = this.props;
 
+    const singleItemLink = `/stuff/${item.id}`;
+
     return (
       <div>
       <Card>
@@ -23,8 +29,8 @@ class ItemCard extends React.Component {
         <CardTitle>{item.itemName}</CardTitle>
           <CardText>{item.itemDescription}</CardText>
           <ButtonGroup>
-            <Button>Edit</Button>
-            <Button>View</Button>
+            <Button><i className="fas fa-edit"></i></Button>
+            <Button tag={RRLink} to={singleItemLink}><i className="fas fa-eye"></i></Button>
           </ButtonGroup>
         </CardBody>
       </Card>
