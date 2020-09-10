@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import {
   Link as RRLink,
@@ -11,17 +12,13 @@ import {
 
 import itemShape from '../../../helpers/props/itemShape';
 
-class ItemCard extends React.Component {
-  static propTypes = {
-    item: itemShape.itemShape,
-  }
+const ItemCard = (props) => {
+  const { item, deleteItem } = props;
 
-  render() {
-    const { item } = this.props;
+  const singleItemLink = `/stuff/${item.id}`;
+  const editLink = `/edit/${item.id}`;
 
-    const singleItemLink = `/stuff/${item.id}`;
-
-    return (
+  return (
       <div>
       <Card>
         <CardImg top width="100%" src={item.itemImage} alt="Card image cap" />
@@ -29,14 +26,19 @@ class ItemCard extends React.Component {
         <CardTitle>{item.itemName}</CardTitle>
           <CardText>{item.itemDescription}</CardText>
           <ButtonGroup>
-            <Button><i className="fas fa-edit"></i></Button>
+            <Button tag={RRLink} to={editLink}><i className="fas fa-edit"></i></Button>
             <Button tag={RRLink} to={singleItemLink}><i className="fas fa-eye"></i></Button>
+            <Button onClick={() => { deleteItem(item.id); }}><i className="fas fa-dumpster"></i></Button>
           </ButtonGroup>
         </CardBody>
       </Card>
     </div>
-    );
-  }
-}
+  );
+};
+
+ItemCard.propTypes = {
+  item: itemShape.itemShape,
+  deleteItem: PropTypes.func.isRequired,
+};
 
 export default ItemCard;
