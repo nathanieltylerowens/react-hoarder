@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 
 import {
   Link as RRLink,
@@ -17,23 +17,25 @@ import {
 
 import itemsData from '../../../helpers/data/itemsData';
 
-class SingleStuff extends React.Component {
-  state = {
-    item: {},
-  }
+const SingleStuff = (props) => {
+  const [item, setItem] = useState({});
 
-  componentDidMount() {
-    const { itemId } = this.props.match.params;
+  useEffect(() => {
+    const { itemId } = props.match.params;
 
     itemsData.getItemById(itemId)
-      .then((res) => this.setState({ item: res.data }))
+      .then((res) => setItem(res.data))
       .catch((err) => console.error('get single item broke', err));
-  }
+  }, [props.match.params]);
 
-  render() {
-    const { item } = this.state;
+  const deleteItem = () => {
+    const { itemId } = props.match.params;
+    itemsData.deleteItem(itemId)
+      .then(() => props.history.push('/stuff'))
+      .catch((err) => console.error('delete single item failed!', err));
+  };
 
-    return (
+  return (
       <div className="SingleItem">
         <h1>{item.itemName}</h1>
         <Col sm="12" md={{ size: 6, offset: 3 }}>
@@ -44,14 +46,14 @@ class SingleStuff extends React.Component {
                   <CardText>{item.itemDescription}</CardText>
                 <ButtonGroup>
                   <Button tag={RRLink} to="/stuff">Return</Button>
+                  <Button onClick={deleteItem}><i className="fas fa-trash"></i></Button>
                 </ButtonGroup>
               </CardBody>
           </Card>
         </CardGroup>
         </Col>
       </div>
-    );
-  }
-}
+  );
+};
 
 export default SingleStuff;
